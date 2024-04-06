@@ -6,7 +6,7 @@ const app = express()
 const port = process.env.port || 5000
 const { Server } = require("socket.io");
 const { createServer } = require("http");
-const server = createServer();
+const server = createServer(app);
 
 // socket server
 const io = new Server(server, {
@@ -53,6 +53,7 @@ const client = new MongoClient(uri, {
 //Database collection
 const database = client.db('EasyChatDB');
 const userCollection = database.collection('users');
+const chatCollection = database.collection('chats');
 
 async function run() {
   try {
@@ -65,6 +66,14 @@ async function run() {
     app.post('/users', async (req, res) => {
       const newUser = req.body;
       const result = await userCollection.insertOne(newUser);
+      res.send(result)
+    })
+
+    app.post('/send-message', async (req, res) => {
+      console.log("hitting");
+      const newMessage = req.body;
+      console.log(newMessage);
+      const result = await chatCollection.insertOne(newMessage);
       res.send(result)
     })
 
