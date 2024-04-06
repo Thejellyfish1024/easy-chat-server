@@ -2,11 +2,27 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const express = require('express')
 const cors = require('cors');
 require('dotenv').config();
-// const jwt = require('jsonwebtoken')
 const app = express()
 const port = process.env.port || 5000
-// const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { Server } = require("socket.io");
+const { createServer } = require("http");
+const server = createServer();
 
+// socket server
+const io = new Server(server, {
+  cors : {
+  origin: ["http://localhost:5173"],
+  methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+}
+})
+
+io.on("connection", (socket) =>{
+  console.log("User Connected", socket.id);
+})
+
+// middlewares
 app.use(cors({
   origin: ["http://localhost:5173"],
   methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
@@ -14,6 +30,8 @@ app.use(cors({
   optionsSuccessStatus: 204,
 }))
 app.use(express.json())
+
+
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -50,11 +68,11 @@ async function run() {
       res.send(result)
     })
 
-    app.get('/users', async (req, res) => {
+    app.get('/users/:email', async (req, res) => {
       // console.log('hitting');
       const email = req?.params.email;
-      console.log(email);
-      const result = await userCollection.findOne({email : email})
+      // console.log(email);
+      const result = await userCollection.findOne({ email: email })
       res.send(result);
     })
 
@@ -67,7 +85,7 @@ async function run() {
   }
 }
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
