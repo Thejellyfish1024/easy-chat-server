@@ -10,15 +10,15 @@ const server = createServer(app);
 
 // socket server
 const io = new Server(server, {
-  cors : {
-  origin: ["http://localhost:5173"],
-  methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
-  credentials: true,
-  optionsSuccessStatus: 204,
-}
+  cors: {
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
+    credentials: true,
+    optionsSuccessStatus: 204,
+  }
 })
 
-io.on("connection", (socket) =>{
+io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
 })
 
@@ -70,9 +70,9 @@ async function run() {
     })
 
     app.post('/send-message', async (req, res) => {
-      console.log("hitting");
+      // console.log("hitting");
       const newMessage = req.body;
-      console.log(newMessage);
+      // console.log(newMessage);
       const result = await chatCollection.insertOne(newMessage);
       res.send(result)
     })
@@ -82,6 +82,20 @@ async function run() {
       const email = req?.params.email;
       // console.log(email);
       const result = await userCollection.findOne({ email: email })
+      res.send(result);
+    })
+
+
+    app.get('/chats', async (req, res) => {
+      console.log('hitting');
+      const { sender, receiver } = req?.query
+      console.log(sender, receiver);
+      const result = await chatCollection.find({
+        $or: [
+          { sender, receiver },
+          { sender: receiver, receiver: sender }
+        ]
+      }).toArray();
       res.send(result);
     })
 
