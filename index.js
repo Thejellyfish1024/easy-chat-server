@@ -2,10 +2,13 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const express = require('express')
 const cors = require('cors');
 require('dotenv').config();
-const app = express()
-const port = process.env.port || 5000
 const { Server } = require("socket.io");
 const { createServer } = require("http");
+const postMessage = require('./controllers/chats/postMessage');
+const getSingleUser = require('./controllers/users/getSingleUser');
+
+const app = express()
+const port = process.env.port || 5000
 const server = createServer(app);
 
 // socket server
@@ -69,27 +72,27 @@ async function run() {
       res.send(result)
     })
 
-    app.post('/send-message', async (req, res) => {
-      // console.log("hitting");
-      const newMessage = req.body;
-      // console.log(newMessage);
-      const result = await chatCollection.insertOne(newMessage);
-      res.send(result)
-    })
 
-    app.get('/users/:email', async (req, res) => {
-      // console.log('hitting');
-      const email = req?.params.email;
-      // console.log(email);
-      const result = await userCollection.findOne({ email: email })
-      res.send(result);
-    })
+    app.post("/send-message", async (req, res) =>
+      postMessage(req, res, chatCollection)
+    );
+    app.get("/users/:email", async (req, res) =>
+      getSingleUser(req, res, userCollection)
+    );
+
+    // app.get('/users/:email', async (req, res) => {
+    //   // console.log('hitting');
+    //   const email = req?.params.email;
+    //   // console.log(email);
+    //   const result = await userCollection.findOne({ email: email })
+    //   res.send(result);
+    // })
 
 
     app.get('/chats', async (req, res) => {
-      console.log('hitting');
+      // console.log('hitting');
       const { sender, receiver } = req?.query
-      console.log(sender, receiver);
+      // console.log(sender, receiver);
       const result = await chatCollection.find({
         $or: [
           { sender, receiver },
