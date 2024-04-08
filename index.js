@@ -6,6 +6,9 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const postMessage = require('./controllers/chats/postMessage');
 const getSingleUser = require('./controllers/users/getSingleUser');
+const getSpecificChats = require('./controllers/chats/getSpecificChats');
+const postNewUser = require('./controllers/users/postNewUser');
+const getSearchedUsers = require('./controllers/users/getSearchedUsers');
 
 const app = express()
 const port = process.env.port || 5000
@@ -63,44 +66,31 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    // APIS
+    // <------ ALL APIS ------->
 
-    // user related api
-    app.post('/users', async (req, res) => {
-      const newUser = req.body;
-      const result = await userCollection.insertOne(newUser);
-      res.send(result)
-    })
+    // <------ user related api ------->
+  
+    app.post("/users", async (req, res) =>
+      postNewUser(req, res, userCollection)
+    );
 
+    app.get("/users/:email", async (req, res) =>
+      getSingleUser(req, res, userCollection)
+    );
+    
+    app.get("/users-search", async (req, res) =>
+      getSearchedUsers(req, res, userCollection)
+    );
+
+    // <------- chat related api ------->
 
     app.post("/send-message", async (req, res) =>
       postMessage(req, res, chatCollection)
     );
-    app.get("/users/:email", async (req, res) =>
-      getSingleUser(req, res, userCollection)
+
+    app.get("/chats", async (req, res) =>
+      getSpecificChats(req, res, chatCollection)
     );
-
-    // app.get('/users/:email', async (req, res) => {
-    //   // console.log('hitting');
-    //   const email = req?.params.email;
-    //   // console.log(email);
-    //   const result = await userCollection.findOne({ email: email })
-    //   res.send(result);
-    // })
-
-
-    app.get('/chats', async (req, res) => {
-      // console.log('hitting');
-      const { sender, receiver } = req?.query
-      // console.log(sender, receiver);
-      const result = await chatCollection.find({
-        $or: [
-          { sender, receiver },
-          { sender: receiver, receiver: sender }
-        ]
-      }).toArray();
-      res.send(result);
-    })
 
 
     // await client.db("admin").command({ ping: 1 });
