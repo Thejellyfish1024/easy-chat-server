@@ -25,9 +25,50 @@ const io = new Server(server, {
   }
 })
 
+let users = [];
+
+
+//Check for duplicate user
+const addUser = (userEmail, socketId) => {
+  !users?.some(user => user.userEmail === userEmail) &&
+    users.push({ userEmail, socketId });
+}
+
+//Remove user after disconnect
+const removeUser = (socketId) => {
+  users = users.filter(user => user.socketId !== socketId);
+}
+
+
+// //Get user 
+// const getUser = userEmail => {
+//   return users.find(user => user?.userEmail === userEmail);
+// }
+
 io.on("connection", (socket) => {
   console.log("User Connected", socket.id);
+
+  //Connect user
+  socket.on("addUser", userEmail => {
+    if (userEmail) {
+      // console.log(`socket id of ${userEmail} is ${socket?.id}`);
+      addUser(userEmail, socket.id);
+      // console.log("users", users);
+      io.emit("getUsers", users);
+    }
+  });
+
+
+  //Disconnect user
+  socket.on("disconnect", () => {
+    console.log("A user disconnected")
+    removeUser(socket.id);
+    io.emit("getUsers", users);
+  })
+
 })
+
+
 
 // middlewares
 app.use(cors({
@@ -70,7 +111,7 @@ async function run() {
     // <------ ALL APIS ------->
 
     // <------ user related api ------->
-  
+
     app.post("/users", async (req, res) =>
       postNewUser(req, res, userCollection)
     );
@@ -78,7 +119,7 @@ async function run() {
     app.get("/users/:email", async (req, res) =>
       getSingleUser(req, res, userCollection)
     );
-    
+
     app.get("/users-search", async (req, res) =>
       getSearchedUsers(req, res, userCollection)
     );
@@ -86,7 +127,7 @@ async function run() {
     // <------- chat related api ------->
 
     app.post("/send-message", async (req, res) =>
-      postMessage(req, res, chatCollection)
+      postMessage(req, res, chatCollection, io, users)
     );
 
     app.get("/chats", async (req, res) =>
