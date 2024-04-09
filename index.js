@@ -9,6 +9,7 @@ const getSingleUser = require('./controllers/users/getSingleUser');
 const getSpecificChats = require('./controllers/chats/getSpecificChats');
 const postNewUser = require('./controllers/users/postNewUser');
 const getSearchedUsers = require('./controllers/users/getSearchedUsers');
+const postNewContact = require('./controllers/contacts/postNewContact');
 
 const app = express()
 const port = process.env.port || 5000
@@ -92,6 +93,11 @@ async function run() {
       getSpecificChats(req, res, chatCollection)
     );
 
+    // <------- contact related api ------->
+
+    app.post("/add-contact", async (req, res) =>
+      postNewContact(req, res, userCollection)
+    );
 
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
