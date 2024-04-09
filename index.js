@@ -10,15 +10,27 @@ const getSpecificChats = require('./controllers/chats/getSpecificChats');
 const postNewUser = require('./controllers/users/postNewUser');
 const getSearchedUsers = require('./controllers/users/getSearchedUsers');
 const postNewContact = require('./controllers/contacts/postNewContact');
+const cookieParser = require('cookie-parser');
 
 const app = express()
 const port = process.env.port || 5000
 const server = createServer(app);
 
+// middlewares
+app.use(cors({
+  origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app",],
+  methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
+  credentials: true,
+  optionsSuccessStatus: 204,
+}))
+app.use(express.json())
+
+app.use(cookieParser());
+
 // socket server
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app",],
     methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 204,
@@ -70,14 +82,6 @@ io.on("connection", (socket) => {
 
 
 
-// middlewares
-app.use(cors({
-  origin: ["http://localhost:5173"],
-  methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
-  credentials: true,
-  optionsSuccessStatus: 204,
-}))
-app.use(express.json())
 
 
 
