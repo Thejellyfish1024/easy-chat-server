@@ -1,7 +1,7 @@
 const postNewContact = async (req, res, userCollection) => {
     try {
         const { currentUser, newContact } = req.body;
-        console.log(currentUser, newContact);
+        // console.log(currentUser, newContact);
 
         // Check if the user already exists in the contacts
         const isSameContactExist = await userCollection.findOne({
@@ -28,11 +28,8 @@ const postNewContact = async (req, res, userCollection) => {
             res.send({ update: true })
         }
 
-        console.log("current", updatedContacts);
-        console.log("other", updatedContactsForNewContact);
-
-        // const result = await userCollection.insertOne(newUser);
-        // res.send(result)
+        // console.log("current", updatedContacts);
+        // console.log("other", updatedContactsForNewContact);
     } catch (error) {
         console.log("error to add new contact in database", error);
     }

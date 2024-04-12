@@ -12,6 +12,7 @@ const getSearchedUsers = require('./controllers/users/getSearchedUsers');
 const postNewContact = require('./controllers/contacts/postNewContact');
 const cookieParser = require('cookie-parser');
 const {updateUserName, updateUserAbout, updateUserPhone} = require('./controllers/users/updateUserInfo');
+const contactRequests = require('./controllers/contacts/contactRequests');
 
 const app = express()
 const port = process.env.port || 5000
@@ -152,6 +153,9 @@ async function run() {
 
     app.post("/add-contact", async (req, res) =>
       postNewContact(req, res, userCollection)
+    );
+    app.put("/contact-request", async (req, res) =>
+      contactRequests(req, res, userCollection)
     );
 
     // await client.db("admin").command({ ping: 1 });
