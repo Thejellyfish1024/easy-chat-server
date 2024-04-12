@@ -11,7 +11,7 @@ const postNewUser = require('./controllers/users/postNewUser');
 const getSearchedUsers = require('./controllers/users/getSearchedUsers');
 const postNewContact = require('./controllers/contacts/postNewContact');
 const cookieParser = require('cookie-parser');
-const updateUserName = require('./controllers/users/updateUserInfo');
+const {updateUserName, updateUserAbout, updateUserPhone} = require('./controllers/users/updateUserInfo');
 
 const app = express()
 const port = process.env.port || 5000
@@ -122,6 +122,12 @@ async function run() {
     );
     app.put("/update-user-name/:email", async (req, res) =>
       updateUserName(req, res, userCollection)
+    );
+    app.put("/update-user-about/:email", async (req, res) =>
+      updateUserAbout(req, res, userCollection)
+    );
+    app.put("/update-user-phone/:email", async (req, res) =>
+      updateUserPhone(req, res, userCollection)
     );
 
     app.get("/users/:email", async (req, res) =>
