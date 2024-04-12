@@ -1,15 +1,20 @@
-const updateUserInfo = async (req, res, userCollection) => {
+const updateUserName = async (req, res, userCollection) => {
     try {
         // console.log("hitting");
-        // console.log("users in postMessage", users);
-        const userInfo = req.body;
+        const updatedName = req.body.updatedSection;
+        // console.log("updated Name", updatedName);
         const email = req?.params?.email;
-        // console.log(newMessage);
-        const result = await userCollection.updateOne({email : email}, userInfo);
+        // console.log("email", email);
+        const updateDoc = {
+            $set: {
+                name: updatedName
+            },
+        };
+        const result = await userCollection.updateOne({ email: email }, updateDoc);
         res.send(result)
     } catch (error) {
         console.log("error to add new message in database", error);
     }
 };
 
-module.exports = updateUserInfo;
+module.exports = updateUserName;
