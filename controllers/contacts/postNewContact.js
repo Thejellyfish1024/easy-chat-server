@@ -24,7 +24,12 @@ const postNewContact = async (req, res, userCollection) => {
             { $addToSet: { contacts: currentUser } }
         );
 
-        if (updatedContacts?.modifiedCount && updatedContactsForNewContact?.modifiedCount) {
+        const deleteAddRequest = await userCollection.updateOne(
+            { email: currentUser },
+            { $pull: { addRequests: newContact } }
+        )
+
+        if (updatedContacts?.modifiedCount && updatedContactsForNewContact?.modifiedCount && deleteAddRequest?.modifiedCount) {
             res.send({ update: true })
         }
 
