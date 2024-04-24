@@ -15,6 +15,7 @@ const {updateUserName, updateUserAbout, updateUserPhone} = require('./controller
 const contactRequests = require('./controllers/contacts/contactRequests');
 const deleteRequest = require('./controllers/contacts/deleteRequest');
 const updateUserImage = require('./controllers/users/updateUserImage');
+const deleteMessage = require('./controllers/chats/deleteMessage');
 
 const app = express()
 const port = process.env.port || 5000
@@ -152,6 +153,9 @@ async function run() {
 
     app.get("/chats", async (req, res) =>
       getSpecificChats(req, res, chatCollection)
+    );
+    app.delete("/delete-message/:id", async (req, res) =>
+      deleteMessage(req, res, chatCollection)
     );
 
     // <------- contact related api ------->
