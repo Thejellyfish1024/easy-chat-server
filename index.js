@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const {updateUserName, updateUserAbout, updateUserPhone} = require('./controllers/users/updateUserInfo');
 const contactRequests = require('./controllers/contacts/contactRequests');
 const deleteRequest = require('./controllers/contacts/deleteRequest');
+const updateUserImage = require('./controllers/users/updateUserImage');
 
 const app = express()
 const port = process.env.port || 5000
@@ -21,7 +22,7 @@ const server = createServer(app);
 
 // middlewares
 app.use(cors({
-  origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app",],
+  origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app", "wss://localhost:5173"],
   methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
   credentials: true,
   optionsSuccessStatus: 204,
@@ -33,7 +34,7 @@ app.use(cookieParser());
 // socket server
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app",],
+    origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app", "wss://localhost:5173"],
     methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 204,
@@ -130,6 +131,9 @@ async function run() {
     );
     app.put("/update-user-phone/:email", async (req, res) =>
       updateUserPhone(req, res, userCollection)
+    );
+    app.put("/update-image/:email", async (req, res) =>
+      updateUserImage(req, res, userCollection)
     );
 
     app.get("/users/:email", async (req, res) =>
