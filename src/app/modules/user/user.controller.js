@@ -1,4 +1,4 @@
-const { createUserService, getSingleUserService } = require("./user.service");
+const { createUserService, getSingleUserService, updateUserInfoService } = require("./user.service");
 
 // function for creating new user
 exports.createUser = async (req, res) => {
@@ -31,6 +31,29 @@ exports.getSingleUser = async (req, res) => {
         else {
             return res.status(200).json({
                 message: "No user with this email is available"
+            });
+        }
+
+    } catch (error) {
+        res.status(400).json({
+            status: "Failed",
+            message: "Something went wrong!!",
+            error: error,
+        });
+    }
+}
+
+exports.updateUserInfo = async (req, res) => {
+    try {
+        const email = req?.params?.email;
+        const data = req?.body;
+        const result = await updateUserInfoService(email, data);
+        if (result) {
+            return res.status(200).json(result);
+        }
+        else {
+            return res.status(200).json({
+                message: "Update is unsuccessful"
             });
         }
 
