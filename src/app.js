@@ -3,8 +3,7 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 const { createServer } = require("http");
 const cookieParser = require('cookie-parser');
-// const bookRoutes = require('./app/modules/book/book.routes')
-// const userRoutes = require('./app/modules/user/user.route');
+const userRoutes = require('./app/modules/user/user.routes');
 
 // 
 const app = express();
@@ -29,9 +28,32 @@ app.get("/", (req, res) => {
     });
 });
 
-// app.use('/books', bookRoutes)
-// app.use('/users', userRoutes)
+// ALL APIS
+// <------ user related api ------->
+app.use('/users', userRoutes)
 
+
+
+
+
+//   app.put("/update-user-name/:email", async (req, res) =>
+//     updateUserName(req, res, userCollection)
+//   );
+//   app.put("/update-user-about/:email", async (req, res) =>
+//     updateUserAbout(req, res, userCollection)
+//   );
+//   app.put("/update-user-phone/:email", async (req, res) =>
+//     updateUserPhone(req, res, userCollection)
+//   );
+//   app.put("/update-image/:email", async (req, res) =>
+//     updateUserImage(req, res, userCollection)
+//   );
+
+
+
+//   app.get("/users-search", async (req, res) =>
+//     getSearchedUsers(req, res, userCollection)
+//   );
 
 
 module.exports = server;
