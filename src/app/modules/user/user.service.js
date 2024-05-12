@@ -20,8 +20,21 @@ exports.updateUserInfoService = async (email, data) => {
     );
     return result;
 }
-// exports.getUsersService = async(data)=>{
-//     const result = await User.find(data);
-//     return result;
-// }
+
+exports.getSearchedUsersService = async (query, email) => {
+
+    const regexQuery = {
+        $or: [
+            { email: { $regex: query, $options: "i" } },
+            { name: { $regex: query, $options: "i" } },
+        ],
+    }
+    const result = await User.find(regexQuery);
+    if (result) {
+        const searchedUsers = result.filter(user => user?.email !== email)
+        return searchedUsers;
+    }
+}
+
+
 

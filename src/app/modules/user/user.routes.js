@@ -1,17 +1,13 @@
 const express = require("express");
-const { createUser, getSingleUser, updateUserInfo } = require("./user.controller");
+const { createUser, getSingleUser, updateUserInfo, getSearchedUsers } = require("./user.controller");
 
 const router = express.Router();
 
-router.get("/:email", getSingleUser);
+router.get("/search", getSearchedUsers);
 router.post("/", createUser);
 router.put("/update-user/:email", updateUserInfo);
+router.get("/:email", getSingleUser);
 
-
-
-//   app.get("/users/:email", async (req, res) =>
-//     getSingleUser(req, res, userCollection)
-//   );
 
 
 module.exports = router;

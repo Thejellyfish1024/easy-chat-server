@@ -4,6 +4,7 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./app/modules/user/user.routes');
+const chatRoutes = require('./app/modules/chat/chat.routes');
 
 // 
 const app = express();
@@ -31,29 +32,12 @@ app.get("/", (req, res) => {
 // ALL APIS
 // <------ user related api ------->
 app.use('/users', userRoutes)
+// <------ chat related api ------->
+app.use('/chats', chatRoutes)
 
 
 
 
-
-//   app.put("/update-user-name/:email", async (req, res) =>
-//     updateUserName(req, res, userCollection)
-//   );
-//   app.put("/update-user-about/:email", async (req, res) =>
-//     updateUserAbout(req, res, userCollection)
-//   );
-//   app.put("/update-user-phone/:email", async (req, res) =>
-//     updateUserPhone(req, res, userCollection)
-//   );
-//   app.put("/update-image/:email", async (req, res) =>
-//     updateUserImage(req, res, userCollection)
-//   );
-
-
-
-//   app.get("/users-search", async (req, res) =>
-//     getSearchedUsers(req, res, userCollection)
-//   );
 
 
 module.exports = server;

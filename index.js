@@ -197,6 +197,8 @@ async function run() {
       getSearchedUsers(req, res, userCollection)
     );
 
+    // done
+
     // <------- chat related api ------->
 
     app.post("/send-message", async (req, res) =>
