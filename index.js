@@ -173,29 +173,29 @@ async function run() {
 
     // <------ user related api ------->
 
-    app.post("/users", async (req, res) =>
-      postNewUser(req, res, userCollection)
-    );
-    app.put("/update-user-name/:email", async (req, res) =>
-      updateUserName(req, res, userCollection)
-    );
-    app.put("/update-user-about/:email", async (req, res) =>
-      updateUserAbout(req, res, userCollection)
-    );
-    app.put("/update-user-phone/:email", async (req, res) =>
-      updateUserPhone(req, res, userCollection)
-    );
-    app.put("/update-image/:email", async (req, res) =>
-      updateUserImage(req, res, userCollection)
-    );
+    // app.post("/users", async (req, res) =>
+    //   postNewUser(req, res, userCollection)
+    // );
+    // app.put("/update-user-name/:email", async (req, res) =>
+    //   updateUserName(req, res, userCollection)
+    // );
+    // app.put("/update-user-about/:email", async (req, res) =>
+    //   updateUserAbout(req, res, userCollection)
+    // );
+    // app.put("/update-user-phone/:email", async (req, res) =>
+    //   updateUserPhone(req, res, userCollection)
+    // );
+    // app.put("/update-image/:email", async (req, res) =>
+    //   updateUserImage(req, res, userCollection)
+    // );
 
-    app.get("/users/:email", async (req, res) =>
-      getSingleUser(req, res, userCollection)
-    );
+    // app.get("/users/:email", async (req, res) =>
+    //   getSingleUser(req, res, userCollection)
+    // );
 
-    app.get("/users-search", async (req, res) =>
-      getSearchedUsers(req, res, userCollection)
-    );
+    // app.get("/users-search", async (req, res) =>
+    //   getSearchedUsers(req, res, userCollection)
+    // );
 
     // done
 
@@ -205,24 +205,24 @@ async function run() {
       postMessage(req, res, chatCollection, io, users)
     );
 
-    app.get("/chats", async (req, res) =>
-      getSpecificChats(req, res, chatCollection)
-    );
-    app.delete("/delete-message/:id", async (req, res) =>
-      deleteMessage(req, res, chatCollection)
-    );
+    // app.get("/chats", async (req, res) =>
+    //   getSpecificChats(req, res, chatCollection)
+    // );
+    // app.delete("/delete-message/:id", async (req, res) =>
+    //   deleteMessage(req, res, chatCollection)
+    // );
 
-    // <------- contact related api ------->
+    // // <------- contact related api ------->
 
-    app.post("/add-contact", async (req, res) =>
-      postNewContact(req, res, userCollection)
-    );
-    app.put("/contact-request", async (req, res) =>
-      contactRequests(req, res, userCollection)
-    );
-    app.put("/delete-request/:email", async (req, res) =>
-      deleteRequest(req, res, userCollection)
-    );
+    // app.post("/add-contact", async (req, res) =>
+    //   postNewContact(req, res, userCollection)
+    // );
+    // app.put("/contact-request", async (req, res) =>
+    //   contactRequests(req, res, userCollection)
+    // );
+    // app.put("/delete-request/:email", async (req, res) =>
+    //   deleteRequest(req, res, userCollection)
+    // );
 
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");

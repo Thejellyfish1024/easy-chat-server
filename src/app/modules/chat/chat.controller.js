@@ -1,3 +1,4 @@
+const { users, getIO } = require("../../socket/socket");
 const { postMessageService, getSpecificChatsService, deleteMessageService } = require("./chat.service");
 
 // function for getting specific messages
@@ -23,8 +24,13 @@ exports.getSpecificChats = async (req, res) => {
 // function for creating new message
 exports.postMessage = async (req, res) => {
     try {
+        console.log(users);
         const data = req.body;
         const result = await postMessageService(data);
+        const receiver = users?.find(user => user?.userEmail === newMessage?.receiver);
+        getIO.to(receiver?.socketId).emit("getMessage", {
+            refetch: true
+        });
         return res.status(200).json({
             status: "Success",
             message: "Message created successful",
