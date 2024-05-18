@@ -1,4 +1,4 @@
-const { users, getIO } = require("../../socket/socket");
+const { getIO, getUsers } = require("../../socket/socket");
 const { postMessageService, getSpecificChatsService, deleteMessageService } = require("./chat.service");
 
 // function for getting specific messages
@@ -24,19 +24,23 @@ exports.getSpecificChats = async (req, res) => {
 // function for creating new message
 exports.postMessage = async (req, res) => {
     try {
-        console.log(users);
-        const data = req.body;
-        const result = await postMessageService(data);
-        const receiver = users?.find(user => user?.userEmail === newMessage?.receiver);
-        getIO.to(receiver?.socketId).emit("getMessage", {
-            refetch: true
-        });
-        return res.status(200).json({
-            status: "Success",
-            message: "Message created successful",
-            data: result,
-            insert: true
-        });
+        const users = getUsers();
+        const io = getIO();
+        const newMessage = req.body;
+        const result = await postMessageService(newMessage);
+        if (result) {
+            const receiver = users?.find(user => user?.userEmail === newMessage?.receiver);
+            io?.to(receiver?.socketId)?.emit("getMessage", {
+                refetch: true
+            });
+            return res.status(200).json({
+                status: "Success",
+                message: "Message created successful",
+                data: result,
+                insert: true
+            });
+        }
+
 
     } catch (error) {
         res.status(400).json({
