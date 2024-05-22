@@ -12,12 +12,14 @@ const server = createServer(app);
 
 
 // middlewares
-app.use(cors({
-    origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app"],
-    methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
-    credentials: true,
-    optionsSuccessStatus: 204,
-}))
+// app.use(cors({
+//     origin: ["http://localhost:5173", "https://easy-chat-client.vercel.app"],
+//     methods: ["GET", "PATCH", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//     optionsSuccessStatus: 204,
+// }))
+app.use(cors())
+
 app.use(express.json());
 app.use(cookieParser());
 

@@ -22,6 +22,12 @@ const initializeSocket = (server) => {
             methods: ["GET", "POST"],
             credentials: true,
         },
+        // cors: {
+        //     origin: "*",
+            // methods: ["GET", "POST"],
+            // allowedHeaders: ["my-custom-header"],
+            // credentials: true,
+        // },
     });
 
     io.on("connection", (socket) => {
@@ -32,7 +38,7 @@ const initializeSocket = (server) => {
             if (userEmail) {
                 addUser(userEmail, socket.id);
                 io.emit("getUsers", users);
-                console.log(users);
+                // console.log(users);
             }
         });
 
@@ -41,7 +47,7 @@ const initializeSocket = (server) => {
             console.log("A user disconnected", socket.id);
             removeUser(socket.id);
             io.emit("getUsers", users);
-            console.log(users);
+            // console.log(users);
         });
     });
 };

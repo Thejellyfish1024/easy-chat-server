@@ -71,7 +71,3 @@ exports.deleteMessage = async (req, res) => {
     }
 }
 
-
-//   app.delete("/delete-message/:id", async (req, res) =>
-//     deleteMessage(req, res, chatCollection)
-//   );
