@@ -1,3 +1,4 @@
+const { getUsers, getIO } = require("../../socket/socket");
 const { createUserService, getSingleUserService, updateUserInfoService, getSearchedUsersService, addNewContactService, checkContactExistService, checkRequestExistService, addNewRequestService, declineRequestService } = require("./user.service");
 
 // function for creating new user
@@ -151,6 +152,8 @@ exports.addNewContact = async (req, res) => {
 exports.addNewRequest = async (req, res) => {
     try {
         const { requestFrom, requestTo } = req.body;
+        const users = getUsers();
+        const io = getIO();
 
         //         Check if the user already exists in the contacts
         const isSameRequestExist = await checkRequestExistService(requestFrom, requestTo);
@@ -160,7 +163,18 @@ exports.addNewRequest = async (req, res) => {
         }
 
         const result = await addNewRequestService(requestFrom, requestTo);
+        // if (result) {
+        //     return res.status(200).json({
+        //         status: "Success",
+        //         data: result,
+        //         update: true
+        //     });
+        // }
         if (result) {
+            const receiver = users?.find(user => user?.userEmail === requestTo);
+            io?.to(receiver?.socketId)?.emit("getRequest", {
+                refetch: true
+            });
             return res.status(200).json({
                 status: "Success",
                 data: result,

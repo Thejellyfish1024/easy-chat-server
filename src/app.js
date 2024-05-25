@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const { Server } = require("socket.io");
 const { createServer } = require("http");
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./app/modules/user/user.routes');
