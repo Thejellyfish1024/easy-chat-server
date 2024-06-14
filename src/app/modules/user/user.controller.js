@@ -1,3 +1,4 @@
+const uploadOnCloudinary = require("../../../utils/cloudinary");
 const { getUsers, getIO } = require("../../socket/socket");
 const { createUserService, getSingleUserService, updateUserInfoService, getSearchedUsersService, addNewContactService, checkContactExistService, checkRequestExistService, addNewRequestService, declineRequestService } = require("./user.service");
 
@@ -66,9 +67,18 @@ exports.getSingleUser = async (req, res) => {
 
 exports.updateUserInfo = async (req, res) => {
     try {
+
         const email = req?.params?.email;
         const data = req?.body;
-        const result = await updateUserInfoService(email, data);
+        const file = req?.file
+        let updateData = { ...data };
+
+        if (file) {
+            const imageUrl = await uploadOnCloudinary(file.path);
+            updateData.image = imageUrl;
+        }
+
+        const result = await updateUserInfoService(email, updateData);
         if (result) {
             return res.status(200).json({
                 status: "Success",
